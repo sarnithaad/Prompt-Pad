@@ -1,0 +1,1 @@
+{"b8d619b3": {"code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"90\");\n    }\n}\n", "language": "java"}, "db374521": {"code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"90\");\n    }\n}\n", "language": "java"}}

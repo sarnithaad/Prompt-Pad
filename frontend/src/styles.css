@@ -1,0 +1,125 @@
+:root {
+  --color-primary: #98c1d9;       /* Bedazzled Blue */
+  --color-primary-dark: #293241;  /* Space Cadet Blue */
+  --color-accent: #ee6c4d;        /* Burnt Sienna Orange */
+  --color-bg-light: #e0fbfc;      /* Light Neutral */
+  --color-text-dark: #2b2d42;     /* Charcoal */
+  --color-error: #ff6f61;         /* Soft Red */
+}
+
+body, .app {
+  font-family: 'Fira Mono', monospace;
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+}
+
+.app.light {
+  --bg: var(--color-bg-light);
+  --text: var(--color-text-dark);
+}
+.app.dark {
+  --bg: var(--color-primary-dark);
+  --text: var(--color-bg-light);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-primary-dark);
+  color: var(--color-bg-light);
+  padding: 1rem;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.snippets button {
+  margin: 0.2rem;
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+  border: none;
+  border-radius: 3px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+}
+.snippets button:hover,
+.snippets button:focus {
+  background: var(--color-primary-dark);
+  color: var(--color-bg-light);
+  outline: none;
+}
+
+.input-section {
+  margin: 1rem 0;
+}
+
+.run-btn, .share-btn, .theme-toggle {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background 0.2s;
+}
+.run-btn:hover, .share-btn:hover, .theme-toggle:hover,
+.run-btn:focus, .share-btn:focus, .theme-toggle:focus {
+  background: #d4553f; /* Slightly darker burnt sienna */
+  outline: none;
+}
+
+.terminal {
+  background: var(--color-primary-dark);
+  color: var(--color-bg-light);
+  padding: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 1rem;
+  min-height: 100px;
+  font-family: 'Fira Mono', monospace;
+  overflow-x: auto;
+}
+.terminal pre {
+  margin: 0;
+  font-family: inherit;
+}
+.terminal .error {
+  color: var(--color-error);
+  font-weight: bold;
+}
+.terminal .faint {
+  color: #999;
+}
+
+.help-section {
+  margin-top: 2rem;
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+  padding: 1rem;
+  border-radius: 5px;
+}
+.app.light .help-section {
+  background: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+.app.dark .help-section {
+  background: var(--color-primary-dark);
+  color: var(--color-bg-light);
+}
+
+.lang-switcher {
+  margin-bottom: 1rem;
+}
+
+.btn-row {
+  margin: 1rem 0;
+}
