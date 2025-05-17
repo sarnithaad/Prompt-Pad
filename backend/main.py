@@ -25,6 +25,10 @@ class SaveRequest(BaseModel):
     title: Optional[str] = ""
     language: str
 
+@app.get("/")
+async def root():
+    return {"message": "Prompt Pad API is running."}
+
 @app.post("/run")
 async def run_code(req: CodeRequest):
     try:
@@ -33,6 +37,7 @@ async def run_code(req: CodeRequest):
             media_type="text/plain"
         )
     except Exception as e:
+        # Optionally log the error here
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/save")
