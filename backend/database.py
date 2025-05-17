@@ -4,12 +4,9 @@ from bson.objectid import ObjectId
 
 # Get MongoDB URI from environment variables
 MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "mongodb://localhost:27017/"
-client = MongoClient(MONGODB_URI)
 try:
     client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
-    # Force connection on a request as the connect=True parameter of MongoClient seems
-    # to be useless here
-    client.server_info()
+    client.server_info()  # Force connection on a request as the connect=True parameter of MongoClient seems useless here
 except Exception as e:
     print("MongoDB connection error:", e)
     raise
