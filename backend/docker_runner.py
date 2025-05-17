@@ -1,5 +1,4 @@
 import docker
-import uuid
 import os
 import shutil
 import tempfile
@@ -79,14 +78,11 @@ def run_code_in_docker(code, user_input, language):
   </PropertyGroup>
 </Project>
 """)
-            # Ensure the project is initialized
             commands.append("dotnet new console -o . --force")
 
-        # Compile step if needed
         if config["compile"]:
             commands.append(config["compile"])
 
-        # Prepare the shell command for running the code
         if user_input:
             run_cmd = f"bash -c 'cat input.txt | {config['run']}'"
         else:
@@ -94,7 +90,6 @@ def run_code_in_docker(code, user_input, language):
         commands.append(run_cmd)
         full_cmd = " && ".join(commands)
 
-        # Run the container (ephemeral, auto-remove)
         container = client.containers.run(
             image=config["image"],
             command=full_cmd,
