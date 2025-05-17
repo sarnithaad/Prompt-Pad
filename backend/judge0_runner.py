@@ -23,6 +23,7 @@ def run_code_in_judge0(code, stdin, language):
 
     headers = {
         "Content-Type": "application/json"
+        "X-RapidAPI-Host": "ce.judge0.com"
     }
 
     data = {
