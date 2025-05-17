@@ -136,8 +136,7 @@ function App() {
         textAlign: "center",
         margin: "24px 0 10px 0",
         borderBottom: "1px solid #eee",
-        paddingBottom: "4px",
-        background: "none"
+        paddingBottom: "4px"
       }}>
         <h1
           style={{
