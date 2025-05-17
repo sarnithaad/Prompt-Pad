@@ -99,7 +99,8 @@ function App() {
     const lang = e.target.value;
     setLanguage(lang);
     setCode(DEFAULT_CODE[lang]);
-    setOutput(""); // Clear output when language changes
+    setOutput("");
+    setInput("");// Clear output when language changes
   };
 
   const saveCode = async () => {
@@ -135,7 +136,8 @@ function App() {
         textAlign: "center",
         margin: "24px 0 10px 0",
         borderBottom: "1px solid #eee",
-        paddingBottom: "4px"
+        paddingBottom: "4px",
+        background: "none"
       }}>
         <h1
           style={{
@@ -147,7 +149,7 @@ function App() {
             letterSpacing: "1px"
           }}
         >
-          Prompt Pad - Code it. Run it. Learn it. — Your Personal Online IDE
+          Prompt Pad - Your Personal Online IDE
         </h1>
         <div
           style={{
@@ -163,7 +165,14 @@ function App() {
 
       {/* The main split container */}
       <div className={`split-app ${theme}`}>
-        <div className={`split-left ${theme}`} style={{ position: "relative" }}>
+        <div
+          className={`split-left ${theme}`}
+          style={{
+            position: "relative",
+            background: theme === "dark" ? "#23272f" : "#fff",
+            color: theme === "dark" ? "#eee" : "#222"
+          }}
+        >
           <div className="editor-header">
             <label>
               Language:&nbsp;
@@ -199,17 +208,28 @@ function App() {
           </div>
           {showHelp && <Help onClose={() => setShowHelp(false)} />}
         </div>
-        <div className={`split-right ${theme}`}>
-          <label className="input-label">Input:</label>
+        <div
+          className={`split-right ${theme}`}
+          style={{
+            background: theme === "dark" ? "#23272f" : "#fff",
+            color: theme === "dark" ? "#eee" : "#222"
+          }}
+        >
+          <label className="input-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Input:</label>
           <textarea
             value={input}
             onChange={e => setInput(e.target.value)}
             rows={3}
             placeholder="Type input here..."
             className="input-box"
+            style={{
+              background: theme === "dark" ? "#181a20" : "#fafafa",
+              color: theme === "dark" ? "#eee" : "#222",
+              border: "1px solid #ccc"
+            }}
           />
-          <div className="output-label">Output:</div>
-          <Terminal output={output} outputRef={outputRef} />
+          <div className="output-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Output:</div>
+          <Terminal output={output} outputRef={outputRef} theme={theme} />
         </div>
       </div>
     </div>
