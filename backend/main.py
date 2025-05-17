@@ -46,7 +46,9 @@ async def save(req: SaveRequest):
         code_id = save_code(req.code, req.title, req.language)
         return {"id": code_id}
     except Exception as e:
+        print("Save error:", e)  # <-- Add this line
         raise HTTPException(status_code=500, detail="Failed to save code: " + str(e))
+
 
 @app.get("/load/{code_id}")
 async def load(code_id: str):
