@@ -29,10 +29,7 @@ function App() {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    // Persist theme in localStorage
-    return localStorage.getItem("theme") || "dark";
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
   const outputRef = useRef();
 
   // Persist theme to localStorage
