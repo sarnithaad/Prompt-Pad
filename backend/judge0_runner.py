@@ -4,7 +4,7 @@ import time
 
 # Judge0 API endpoint (RapidAPI or Community Edition)
 JUDGE0_URL = os.getenv("JUDGE0_URL", "https://ce.judge0.com")
-JUDGE0_KEY = os.getenv("JUDGE0_KEY")  # Only needed for RapidAPI
+
 
 LANGUAGE_MAP = {
     "python": 71,      # Python 3.x
