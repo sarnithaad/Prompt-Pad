@@ -26,10 +26,7 @@ def run_code_in_judge0(code, stdin, language):
     headers = {
         "Content-Type": "application/json"
     }
-    # Add RapidAPI key header if using RapidAPI
-    if JUDGE0_KEY:
-        headers["X-RapidAPI-Key"] = JUDGE0_KEY
-
+   
     data = {
         "source_code": code,
         "language_id": lang_id,
