@@ -144,7 +144,7 @@ function App() {
             margin: 0,
             fontSize: "2rem",
             fontWeight: 700,
-            color: theme === "dark" ? "#eee" : "#222",
+            color: theme === "dark" ? "#eee" : "#fafafa",
             fontFamily: "Montserrat, Arial, sans-serif",
             letterSpacing: "1px"
           }}
