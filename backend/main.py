@@ -3,8 +3,8 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
-from app.database import save_code, get_code
-from app.judge0_runner import run_code_in_judge0
+from database import save_code, get_code
+from judge0_runner import run_code_in_judge0
 
 app = FastAPI()
 
