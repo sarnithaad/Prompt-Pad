@@ -8,6 +8,48 @@ body {
   min-height: 100vh;
 }
 
+/* Page header/title container */
+.header-container {
+  text-align: center;
+  margin: 24px 0 10px 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+  transition: background 0.2s;
+}
+.header-container.light {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.header-container.dark {
+  background: transparent;
+}
+.header-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: "Montserrat", Arial, sans-serif;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+.header-title.light {
+  color: #222;
+}
+.header-title.dark {
+  color: #eee;
+}
+.header-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 2px;
+  transition: color 0.2s;
+}
+.header-subtitle.light {
+  color: #888;
+}
+.header-subtitle.dark {
+  color: #aaa;
+}
+
 /* Split layout */
 .split-app {
   display: flex;
