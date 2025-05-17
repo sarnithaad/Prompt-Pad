@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pydantic
+docker
+pymongo
+python-dotenv
