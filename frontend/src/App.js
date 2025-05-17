@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
-import Editor from "./components/Editor";
+import CodeEditor from "./components/CodeEditor";
 import Terminal from "./components/Terminal";
+import Help from "./components/Help";
 import "./styles/theme.css";
 
 const DEFAULT_CODE = {
@@ -27,6 +28,7 @@ function App() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const outputRef = useRef();
 
   const runCode = async () => {
@@ -43,6 +45,11 @@ function App() {
           body: JSON.stringify({ code, input, language }),
         }
       );
+      if (!response.body) {
+        setOutput("No response body received.");
+        setLoading(false);
+        return;
+      }
       const reader = response.body.getReader();
       let result = "";
       while (true) {
@@ -81,15 +88,22 @@ function App() {
           <button onClick={runCode} disabled={loading} className="run-btn">
             {loading ? "Running..." : "Run"}
           </button>
+          <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
+            ?
+          </button>
         </div>
-        <Editor
-          code={code}
-          setCode={setCode}
-          language={language}
-        />
+        <div style={{ flex: 1, minHeight: 0 }}>
+          <CodeEditor
+            code={code}
+            setCode={setCode}
+            language={language}
+            theme="dark"
+          />
+        </div>
+        {showHelp && <Help onClose={() => setShowHelp(false)} />}
       </div>
       <div className="split-right">
-        <label>Input:</label>
+        <label className="input-label">Input:</label>
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
