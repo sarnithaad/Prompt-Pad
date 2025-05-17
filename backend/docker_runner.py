@@ -66,9 +66,8 @@ def run_code_in_docker(code, user_input, language):
     try:
         volumes = {temp_dir: {"bind": "/code", "mode": "rw"}}
         commands = []
-        if config["compile"]:
-            commands.append(config["compile"])
-        # For C#, ensure csproj is present
+
+        # For C#, ensure csproj is present and project is initialized
         if language.lower() == "csharp":
             csproj_file = os.path.join(temp_dir, "Program.csproj")
             with open(csproj_file, "w") as f:
@@ -80,8 +79,14 @@ def run_code_in_docker(code, user_input, language):
   </PropertyGroup>
 </Project>
 """)
-            commands.insert(0, "dotnet new console -o . --force")
-        # Prepare the shell command
+            # Ensure the project is initialized
+            commands.append("dotnet new console -o . --force")
+
+        # Compile step if needed
+        if config["compile"]:
+            commands.append(config["compile"])
+
+        # Prepare the shell command for running the code
         if user_input:
             run_cmd = f"bash -c 'cat input.txt | {config['run']}'"
         else:
@@ -89,6 +94,7 @@ def run_code_in_docker(code, user_input, language):
         commands.append(run_cmd)
         full_cmd = " && ".join(commands)
 
+        # Run the container (ephemeral, auto-remove)
         container = client.containers.run(
             image=config["image"],
             command=full_cmd,
