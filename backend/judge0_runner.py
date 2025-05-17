@@ -2,8 +2,10 @@ import requests
 import os
 import time
 
-JUDGE0_URL = os.getenv("JUDGE0_URL", "https://ce.judge0.com")
+# Base URL for Judge0 via RapidAPI
+JUDGE0_URL = "https://judge0-ce.p.rapidapi.com"
 
+# Supported languages and their corresponding Judge0 IDs
 LANGUAGE_MAP = {
     "python": 71,
     "c": 50,
@@ -15,6 +17,10 @@ LANGUAGE_MAP = {
     "js": 63
 }
 
+# Your RapidAPI credentials (load securely from env)
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY", "968499a512msha102ae1b2de600ep127cdcjsn213e265c6ad5")
+RAPIDAPI_HOST = "judge0-ce.p.rapidapi.com"
+
 def run_code_in_judge0(code, stdin, language):
     lang_id = LANGUAGE_MAP.get(language.lower())
     if not lang_id:
@@ -22,18 +28,19 @@ def run_code_in_judge0(code, stdin, language):
         return
 
     headers = {
-        "Content-Type": "application/json"
-        "X-RapidAPI-Host": "ce.judge0.com"
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": RAPIDAPI_KEY,
+        "X-RapidAPI-Host": RAPIDAPI_HOST
     }
 
     data = {
         "source_code": code,
         "language_id": lang_id,
-        "stdin": stdin or ""
+        "stdin": stdin or "",
     }
 
     try:
-        submit_url = f"{JUDGE0_URL}/submissions/?base64_encoded=false&wait=false"
+        submit_url = f"{JUDGE0_URL}/submissions?base64_encoded=false&wait=false"
         resp = requests.post(submit_url, json=data, headers=headers)
         print("Judge0 submit response:", resp.status_code, resp.text)
     except Exception as e:
@@ -41,7 +48,7 @@ def run_code_in_judge0(code, stdin, language):
         return
 
     if resp.status_code not in (200, 201):
-        yield b"Failed to submit code."
+        yield b"Failed to submit code to Judge0 API."
         return
 
     token = resp.json().get("token")
@@ -49,6 +56,7 @@ def run_code_in_judge0(code, stdin, language):
         yield b"Failed to submit code. No token received."
         return
 
+    # Polling the result
     poll_url = f"{JUDGE0_URL}/submissions/{token}?base64_encoded=false"
     for i in range(20):
         try:
@@ -76,5 +84,7 @@ def run_code_in_judge0(code, stdin, language):
             )
             yield output.encode()
             return
+
         time.sleep(1)
+
     yield b"Timed out waiting for result."
