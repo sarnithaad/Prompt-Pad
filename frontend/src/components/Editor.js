@@ -1,5 +1,5 @@
 import React from "react";
-import MonacoEditor from "react-monaco-editor";
+import Editor from "@monaco-editor/react";
 
 const MONACO_LANG_MAP = {
   python: "python",
@@ -10,11 +10,11 @@ const MONACO_LANG_MAP = {
   javascript: "javascript",
 };
 
-function Editor({ code, setCode, theme, language }) {
+function CodeEditor({ code, setCode, theme, language }) {
   return (
-    <MonacoEditor
-      width="600"
-      height="400"
+    <Editor
+      height="400px"
+      width="600px"
       language={MONACO_LANG_MAP[language]}
       theme={theme === "dark" ? "vs-dark" : "vs-light"}
       value={code}
@@ -23,9 +23,9 @@ function Editor({ code, setCode, theme, language }) {
         minimap: { enabled: false },
         automaticLayout: true,
       }}
-      onChange={setCode}
+      onChange={(value) => setCode(value ?? "")}
     />
   );
 }
 
-export default Editor;
+export default CodeEditor;
