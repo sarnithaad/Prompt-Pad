@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 
 # Get MongoDB URI from environment variables
 MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "mongodb://localhost:27017/"
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGODB_URI)
 db = client["prompt_pad"]
 codes = db["codes"]
 
