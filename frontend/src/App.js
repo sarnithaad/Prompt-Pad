@@ -154,7 +154,7 @@ function App() {
         <div
           style={{
             fontSize: "1rem",
-            color: theme === "dark" ? "#aaa" : "#555",
+            color: theme === "dark" ? "#aaa" : "#aaa",
             fontWeight: 400,
             marginTop: 2
           }}
