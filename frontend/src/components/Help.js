@@ -4,19 +4,26 @@ function Help({ onClose }) {
   // Optionally fetch extra tips from backend
   const [tips, setTips] = useState([]);
   useEffect(() => {
+    let ignore = false;
     fetch(
       process.env.REACT_APP_API_URL
         ? `${process.env.REACT_APP_API_URL}/help`
         : "http://localhost:8000/help"
     )
       .then(res => res.json())
-      .then(data => setTips(data.tips));
+      .then(data => {
+        if (!ignore && data && Array.isArray(data.tips)) {
+          setTips(data.tips);
+        }
+      })
+      .catch(() => {}); // Ignore errors if backend is unavailable
+    return () => { ignore = true; };
   }, []);
 
   return (
-    <div className="help-editor-modal-overlay" onClick={onClose}>
+    <div className="help-editor-modal-overlay" onClick={onClose} tabIndex={-1} aria-modal="true" role="dialog">
       <div className="help-editor-modal" onClick={e => e.stopPropagation()}>
-        <button className="help-close-btn" onClick={onClose}>×</button>
+        <button className="help-close-btn" onClick={onClose} aria-label="Close help">×</button>
         <h3>How to Use the Code Runner</h3>
         <ol style={{ marginBottom: "18px" }}>
           <li>
@@ -26,13 +33,13 @@ function Help({ onClose }) {
             <b>Write or edit your code</b> in the editor on the left. A starter snippet is provided for each language.
           </li>
           <li>
-            <b>Enter any required input</b> (for <code>input()</code>, <code>scanf</code>, etc.) in the "Input" box on the right.
+            <b>Enter any required input</b> (for <code>input()</code>, <code>scanf</code>, etc.) in the <b>Input</b> box on the right.
           </li>
           <li>
             <b>Click the <span style={{color:'#0070f3'}}>Run</span> button</b> to execute your code.
           </li>
           <li>
-            <b>View the output</b> in the "Output" area below the input box.
+            <b>View the output</b> in the <b>Output</b> area below the input box.
           </li>
         </ol>
         <div style={{ marginBottom: "12px" }}>
