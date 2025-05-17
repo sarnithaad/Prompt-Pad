@@ -19,7 +19,7 @@ const LANGUAGES = [
   { value: "cpp", label: "C++" },
   { value: "java", label: "Java" },
   { value: "csharp", label: "C#" },
-  { value: "javascript", label: "JavaScript" },
+  { value: "javascript", label: "JavaScript" }
 ];
 
 function App() {
@@ -32,12 +32,10 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
   const outputRef = useRef();
 
-  // Persist theme to localStorage
   useEffect(() => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Load shared code from /load/:id if present in URL
   useEffect(() => {
     const match = window.location.pathname.match(/^\/load\/(.+)/);
     if (match) {
@@ -71,14 +69,16 @@ function App() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code, input, language }),
+          body: JSON.stringify({ code, input, language })
         }
       );
+
       if (!response.body) {
         setOutput("No response body received.");
         setLoading(false);
         return;
       }
+
       const reader = response.body.getReader();
       let result = "";
       while (true) {
@@ -86,8 +86,9 @@ function App() {
         if (done) break;
         result += new TextDecoder().decode(value);
         setOutput(result);
-        if (outputRef.current)
+        if (outputRef.current) {
           outputRef.current.scrollTop = outputRef.current.scrollHeight;
+        }
       }
     } catch (err) {
       setOutput(`Error: ${err.message}`);
@@ -100,12 +101,11 @@ function App() {
     setLanguage(lang);
     setCode(DEFAULT_CODE[lang]);
     setOutput("");
-    setInput(""); // Clear input when language changes
   };
 
   const saveCode = async () => {
     const title = prompt("Enter a title for your code (optional):");
-    if (title === null) return; // User cancelled
+    if (title === null) return;
     try {
       const response = await fetch(
         process.env.REACT_APP_API_URL
@@ -114,24 +114,20 @@ function App() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code, title, language }),
+          body: JSON.stringify({ code, title, language })
         }
       );
       if (!response.ok) throw new Error("Failed to save code");
+
       const data = await response.json();
-      window.prompt(
-        "Share this link:",
-        `${window.location.origin}/load/${data.id}`
-      );
+      window.prompt("Share this link:", `${window.location.origin}/load/${data.id}`);
     } catch (err) {
       alert("Failed to save code: " + err.message);
     }
   };
 
-  // --- MAIN RETURN ---
   return (
     <div className={theme}>
-      {/* Page-wide centered heading */}
       <div
         style={{
           textAlign: "center",
@@ -139,8 +135,7 @@ function App() {
           borderBottom: "1px solid #eee",
           paddingBottom: "4px",
           background: theme === "light" ? "#fff" : "transparent",
-          boxShadow: theme === "light" ? "0 2px 8px rgba(0,0,0,0.03)" : "none",
-          transition: "background 0.2s"
+          boxShadow: theme === "light" ? "0 2px 8px rgba(0,0,0,0.03)" : "none"
         }}
       >
         <h1
@@ -148,10 +143,9 @@ function App() {
             margin: 0,
             fontSize: "2rem",
             fontWeight: 700,
-            color: theme === "dark" ? "#eee" : "#222",
+            color: theme === "dark" ? "#eee" : "#000",
             fontFamily: "Montserrat, Arial, sans-serif",
-            letterSpacing: "1px",
-            transition: "color 0.2s"
+            letterSpacing: "1px"
           }}
         >
           Prompt Pad - Your Personal Online IDE
@@ -159,25 +153,21 @@ function App() {
         <div
           style={{
             fontSize: "1rem",
-            color: theme === "dark" ? "#aaa" : "#888",
+            color: "#aaa",
             fontWeight: 400,
-            marginTop: 2,
-            transition: "color 0.2s"
+            marginTop: 2
           }}
         >
           Code it. Run it. Learn it.
         </div>
       </div>
 
-      {/* The main split container */}
       <div className={`split-app ${theme}`}>
         <div
           className={`split-left ${theme}`}
           style={{
-            position: "relative",
             background: theme === "dark" ? "#23272f" : "#fff",
-            color: theme === "dark" ? "#eee" : "#222",
-            transition: "background 0.2s, color 0.2s"
+            color: theme === "dark" ? "#eee" : "#222"
           }}
         >
           <div className="editor-header">
@@ -193,9 +183,7 @@ function App() {
               {loading ? "Running..." : "Run"}
             </button>
             <button onClick={saveCode} className="share-btn" title="Share">Share</button>
-            <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
-              ?
-            </button>
+            <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">?</button>
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="theme-toggle-btn"
@@ -205,22 +193,19 @@ function App() {
               {theme === "dark" ? "🌙" : "🔆"}
             </button>
           </div>
+
           <div style={{ flex: 1, minHeight: 0 }}>
-            <CodeEditor
-              code={code}
-              setCode={setCode}
-              language={language}
-              theme={theme}
-            />
+            <CodeEditor code={code} setCode={setCode} language={language} theme={theme} />
           </div>
+
           {showHelp && <Help onClose={() => setShowHelp(false)} />}
         </div>
+
         <div
           className={`split-right ${theme}`}
           style={{
             background: theme === "dark" ? "#23272f" : "#fff",
-            color: theme === "dark" ? "#eee" : "#222",
-            transition: "background 0.2s, color 0.2s"
+            color: theme === "dark" ? "#eee" : "#222"
           }}
         >
           <label className="input-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Input:</label>
@@ -233,8 +218,7 @@ function App() {
             style={{
               background: theme === "dark" ? "#181a20" : "#fafafa",
               color: theme === "dark" ? "#eee" : "#222",
-              border: "1px solid #ccc",
-              transition: "background 0.2s, color 0.2s"
+              border: "1px solid #ccc"
             }}
           />
           <div className="output-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Output:</div>
