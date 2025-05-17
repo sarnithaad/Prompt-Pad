@@ -6,13 +6,17 @@ JUDGE0_URL = os.getenv("JUDGE0_URL", "https://judge0-ce.p.rapidapi.com")
 JUDGE0_KEY = os.getenv("JUDGE0_KEY", "sharnithadhandapani")  # Optional: for RapidAPI
 
 LANGUAGE_MAP = {
-    "python": 71,  # Python 3.x
-    "cpp": 54,     # C++
-    "java": 62,    # Java
-    "c": 50,       # C
+    "python": 71,      # Python 3.x
+    "c": 50,           # C
+    "cpp": 54,         # C++
+    "java": 62,        # Java
+    "csharp": 51,      # C# (Mono)
+    "cs": 51           # Alias for C#
+    "javascript": 63,  # JavaScript (Node.js)
+    "js": 63,          # Alias for JavaScript
+   
     # Add more as needed
 }
-
 def run_code_in_judge0(code, stdin, language):
     lang_id = LANGUAGE_MAP.get(language.lower())
     resp = requests.post(...)
