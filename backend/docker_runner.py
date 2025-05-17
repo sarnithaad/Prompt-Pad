@@ -2,6 +2,7 @@ import docker
 import uuid
 import os
 import shutil
+import tempfile
 
 LANG_CONFIG = {
     "python": {
@@ -48,9 +49,13 @@ def run_code_in_docker(code, user_input, language):
         yield f"Language {language} not supported."
         return
 
-    client = docker.from_env()
-    temp_dir = f"/tmp/{uuid.uuid4()}"
-    os.makedirs(temp_dir, exist_ok=True)
+    try:
+        client = docker.from_env()
+    except Exception as e:
+        yield f"Error: Docker is not available: {str(e)}"
+        return
+
+    temp_dir = tempfile.mkdtemp(prefix="promptpad_")
     code_file = os.path.join(temp_dir, config["file"])
     with open(code_file, "w") as f:
         f.write(code)
@@ -100,7 +105,7 @@ def run_code_in_docker(code, user_input, language):
         for line in logs:
             yield line.decode(errors="ignore")
     except docker.errors.ContainerError as e:
-        yield f"Error: {e.stderr.decode(errors='ignore')}"
+        yield f"Error: {getattr(e, 'stderr', b'').decode(errors='ignore')}"
     except Exception as e:
         yield f"Error: {str(e)}"
     finally:
