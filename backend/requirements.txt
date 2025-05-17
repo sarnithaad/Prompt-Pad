@@ -4,3 +4,4 @@ pydantic
 docker
 pymongo
 python-dotenv
+python-multipart
