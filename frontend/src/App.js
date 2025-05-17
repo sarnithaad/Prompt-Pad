@@ -75,7 +75,7 @@ function App() {
 
   return (
     <div className="split-app">
-      <div className="split-left">
+      <div className="split-left" style={{ position: "relative" }}>
         <div className="editor-header">
           <label>
             Language:&nbsp;
