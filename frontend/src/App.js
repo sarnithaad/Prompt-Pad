@@ -1,9 +1,6 @@
 import React, { useState, useRef } from "react";
 import Editor from "./components/Editor";
 import Terminal from "./components/Terminal";
-import Toolbar from "./components/Toolbar";
-import Snippets from "./components/Snippets";
-import Help from "./components/Help";
 import "./styles/theme.css";
 
 const DEFAULT_CODE = {
@@ -29,50 +26,50 @@ function App() {
   const [code, setCode] = useState(DEFAULT_CODE["python"]);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
-  const [theme, setTheme] = useState("light");
-  const [showHelp, setShowHelp] = useState(false);
-  const [showSnippets, setShowSnippets] = useState(false);
+  const [loading, setLoading] = useState(false);
   const outputRef = useRef();
 
   const runCode = async () => {
     setOutput("Running...");
-    const response = await fetch("http://localhost:8000/run", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, input, language }),
-    });
-    const reader = response.body.getReader();
-    let result = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      result += new TextDecoder().decode(value);
-      setOutput(result);
-      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    setLoading(true);
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL
+          ? `${process.env.REACT_APP_API_URL}/run`
+          : "http://localhost:8000/run",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code, input, language }),
+        }
+      );
+      const reader = response.body.getReader();
+      let result = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += new TextDecoder().decode(value);
+        setOutput(result);
+        if (outputRef.current)
+          outputRef.current.scrollTop = outputRef.current.scrollHeight;
+      }
+    } catch (err) {
+      setOutput(`Error: ${err.message}`);
     }
+    setLoading(false);
   };
-
-  const handleSnippet = (snippet) => setCode(snippet);
 
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
     setLanguage(lang);
     setCode(DEFAULT_CODE[lang]);
+    setOutput(""); // Clear output when language changes
   };
 
   return (
-    <div className={`app-container ${theme}`}>
-      <Toolbar
-        onRun={runCode}
-        onTheme={() => setTheme(theme === "light" ? "dark" : "light")}
-        onSnippets={() => setShowSnippets(!showSnippets)}
-        onHelp={() => setShowHelp(!showHelp)}
-        code={code}
-        setCode={setCode}
-        language={language}
-      />
-      <div className="main">
-        <div className="editor-section">
+    <div className="split-app">
+      <div className="split-left">
+        <div className="editor-header">
           <label>
             Language:&nbsp;
             <select value={language} onChange={handleLanguageChange}>
@@ -81,21 +78,28 @@ function App() {
               ))}
             </select>
           </label>
-          <Editor code={code} setCode={setCode} theme={theme} language={language} />
+          <button onClick={runCode} disabled={loading} className="run-btn">
+            {loading ? "Running..." : "Run"}
+          </button>
         </div>
-        <div className="io-section">
-          <label>Input (for input/scanf/cin/etc):</label>
-          <textarea
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            rows={3}
-            placeholder="Type input here..."
-          />
-          <Terminal output={output} outputRef={outputRef} />
-        </div>
+        <Editor
+          code={code}
+          setCode={setCode}
+          language={language}
+        />
       </div>
-      {showSnippets && <Snippets onSelect={handleSnippet} language={language} />}
-      {showHelp && <Help />}
+      <div className="split-right">
+        <label>Input:</label>
+        <textarea
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          rows={3}
+          placeholder="Type input here..."
+          className="input-box"
+        />
+        <div className="output-label">Output:</div>
+        <Terminal output={output} outputRef={outputRef} />
+      </div>
     </div>
   );
 }
