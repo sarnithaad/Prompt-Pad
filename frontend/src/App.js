@@ -100,7 +100,7 @@ function App() {
     setLanguage(lang);
     setCode(DEFAULT_CODE[lang]);
     setOutput("");
-    setInput("");// Clear output when language changes
+    setInput(""); // Clear input when language changes
   };
 
   const saveCode = async () => {
@@ -132,23 +132,26 @@ function App() {
   return (
     <div className={theme}>
       {/* Page-wide centered heading */}
-      <div style={{
-    textAlign: "center",
-    margin: "24px 0 10px 0",
-    borderBottom: "1px solid #eee",
-    paddingBottom: "4px",
-    background: theme === "light" ? "#fff" : "transparent", // White in light mode
-    boxShadow: theme === "light" ? "0 2px 8px rgba(0,0,0,0.03)" : "none"
-  }}
->
+      <div
+        style={{
+          textAlign: "center",
+          margin: "24px 0 10px 0",
+          borderBottom: "1px solid #eee",
+          paddingBottom: "4px",
+          background: theme === "light" ? "#fff" : "transparent",
+          boxShadow: theme === "light" ? "0 2px 8px rgba(0,0,0,0.03)" : "none",
+          transition: "background 0.2s"
+        }}
+      >
         <h1
           style={{
             margin: 0,
             fontSize: "2rem",
             fontWeight: 700,
-            color: theme === "dark" ? "#eee" : "#fafafa",
+            color: theme === "dark" ? "#eee" : "#222",
             fontFamily: "Montserrat, Arial, sans-serif",
-            letterSpacing: "1px"
+            letterSpacing: "1px",
+            transition: "color 0.2s"
           }}
         >
           Prompt Pad - Your Personal Online IDE
@@ -156,9 +159,10 @@ function App() {
         <div
           style={{
             fontSize: "1rem",
-            color: theme === "dark" ? "#aaa" : "#aaa",
+            color: theme === "dark" ? "#aaa" : "#888",
             fontWeight: 400,
-            marginTop: 2
+            marginTop: 2,
+            transition: "color 0.2s"
           }}
         >
           Code it. Run it. Learn it.
@@ -172,7 +176,8 @@ function App() {
           style={{
             position: "relative",
             background: theme === "dark" ? "#23272f" : "#fff",
-            color: theme === "dark" ? "#eee" : "#222"
+            color: theme === "dark" ? "#eee" : "#222",
+            transition: "background 0.2s, color 0.2s"
           }}
         >
           <div className="editor-header">
@@ -214,7 +219,8 @@ function App() {
           className={`split-right ${theme}`}
           style={{
             background: theme === "dark" ? "#23272f" : "#fff",
-            color: theme === "dark" ? "#eee" : "#222"
+            color: theme === "dark" ? "#eee" : "#222",
+            transition: "background 0.2s, color 0.2s"
           }}
         >
           <label className="input-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Input:</label>
@@ -227,7 +233,8 @@ function App() {
             style={{
               background: theme === "dark" ? "#181a20" : "#fafafa",
               color: theme === "dark" ? "#eee" : "#222",
-              border: "1px solid #ccc"
+              border: "1px solid #ccc",
+              transition: "background 0.2s, color 0.2s"
             }}
           />
           <div className="output-label" style={{ color: theme === "dark" ? "#eee" : "#222" }}>Output:</div>
