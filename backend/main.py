@@ -8,6 +8,7 @@ from docker_runner import run_code_in_docker
 
 app = FastAPI()
 
+# Allow all origins for development; restrict in production if needed!
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -54,6 +55,7 @@ async def load(code_id: str):
 
 @app.get("/snippets")
 async def snippets():
+    # This endpoint is not used in your current UI, but kept for completeness
     return {
         "python": [
             {"title": "Hello World", "code": "print('Hello, World!')"},
