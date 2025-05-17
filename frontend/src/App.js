@@ -127,8 +127,20 @@ function App() {
     }
   };
 
+  // Add the title header here
   return (
     <div className={`split-app ${theme}`}>
+      <header style={{
+        textAlign: "center",
+        margin: "2rem 0 1rem 0",
+        fontSize: "2.5rem",
+        fontWeight: "bold",
+        letterSpacing: "2px",
+        color: theme === "dark" ? "#fff" : "#222",
+        fontFamily: "Montserrat, Arial, sans-serif"
+      }}>
+        Prompt Pad - Code it. Run it. Learn it. — Your Personal Online IDE
+      </header>
       <div className={`split-left ${theme}`} style={{ position: "relative" }}>
         <div className="editor-header">
           <label>
