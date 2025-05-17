@@ -73,6 +73,30 @@ function App() {
     setOutput(""); // Clear output when language changes
   };
 
+  const saveCode = async () => {
+    const title = prompt("Enter a title for your code:");
+    if (title === null) return; // User cancelled
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL
+          ? `${process.env.REACT_APP_API_URL}/save`
+          : "http://localhost:8000/save",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code, title, language }),
+        }
+      );
+      const data = await response.json();
+      window.prompt(
+        "Share this link:",
+        `${window.location.origin}/load/${data.id}`
+      );
+    } catch (err) {
+      alert("Failed to save code: " + err.message);
+    }
+  };
+
   return (
     <div className="split-app">
       <div className="split-left" style={{ position: "relative" }}>
@@ -88,6 +112,7 @@ function App() {
           <button onClick={runCode} disabled={loading} className="run-btn">
             {loading ? "Running..." : "Run"}
           </button>
+          <button onClick={saveCode} className="share-btn" title="Share">Share</button>
           <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
             ?
           </button>
