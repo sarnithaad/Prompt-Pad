@@ -11,11 +11,10 @@ LANGUAGE_MAP = {
     "cpp": 54,         # C++
     "java": 62,        # Java
     "csharp": 51,      # C# (Mono)
-    "cs": 51           # Alias for C#
+    "cs": 51,           # Alias for C#
     "javascript": 63,  # JavaScript (Node.js)
-    "js": 63,          # Alias for JavaScript
-   
-    # Add more as needed
+    "js": 63          # Alias for JavaScript
+
 }
 def run_code_in_judge0(code, stdin, language):
     lang_id = LANGUAGE_MAP.get(language.lower())
