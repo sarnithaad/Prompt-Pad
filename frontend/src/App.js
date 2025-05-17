@@ -127,81 +127,90 @@ function App() {
     }
   };
 
-  // Add the title header here
-return (
-  <div className={`split-app ${theme}`}>
-    <div style={{ textAlign: "center", margin: "16px 0 8px 0" }}>
-      <h1
-        style={{
-          margin: 0,
-          fontSize: "1.8rem",
-          fontWeight: 700,
-          color: theme === "dark" ? "#eee" : "#222",
-          fontFamily: "Montserrat, Arial, sans-serif",
-          letterSpacing: "1px"
-        }}
-      >
-        Prompt P
-      </h1>
-      <div
-        style={{
-          fontSize: "1rem",
-          color: theme === "dark" ? "#aaa" : "#555",
-          fontWeight: 400,
-          marginTop: 2
-        }}
-      >
-        Code it. Run it. Learn it.
+  // --- MAIN RETURN ---
+  return (
+    <div className={theme}>
+      {/* Page-wide centered heading */}
+      <div style={{
+        textAlign: "center",
+        margin: "24px 0 10px 0",
+        borderBottom: "1px solid #eee",
+        paddingBottom: "4px"
+      }}>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "2rem",
+            fontWeight: 700,
+            color: theme === "dark" ? "#eee" : "#222",
+            fontFamily: "Montserrat, Arial, sans-serif",
+            letterSpacing: "1px"
+          }}
+        >
+          Prompt P
+        </h1>
+        <div
+          style={{
+            fontSize: "1rem",
+            color: theme === "dark" ? "#aaa" : "#555",
+            fontWeight: 400,
+            marginTop: 2
+          }}
+        >
+          Code it. Run it. Learn it.
+        </div>
       </div>
-    </div>
 
-         <div className={`split-left ${theme}`} style={{ position: "relative" }}>
-        <div className="editor-header">
-          <label>
-            Language:&nbsp;
-            <select value={language} onChange={handleLanguageChange}>
-              {LANGUAGES.map(l => (
-                <option key={l.value} value={l.value}>{l.label}</option>
-              ))}
-            </select>
-          </label>
-          <button onClick={runCode} disabled={loading} className="run-btn">
-            {loading ? "Running..." : "Run"}
-          </button>
-          <button onClick={saveCode} className="share-btn" title="Share">Share</button>
-          <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
-            ?
-          </button>
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="theme-toggle-btn"
-            title="Toggle theme"
-            style={{ marginLeft: 10, fontSize: 20 }}
-          >
-            {theme === "dark" ? "🌙" : "🔆"}
-          </button>
+      {/* The main split container */}
+      <div className={`split-app ${theme}`}>
+        <div className={`split-left ${theme}`} style={{ position: "relative" }}>
+          <div className="editor-header">
+            <label>
+              Language:&nbsp;
+              <select value={language} onChange={handleLanguageChange}>
+                {LANGUAGES.map(l => (
+                  <option key={l.value} value={l.value}>{l.label}</option>
+                ))}
+              </select>
+            </label>
+            <button onClick={runCode} disabled={loading} className="run-btn">
+              {loading ? "Running..." : "Run"}
+            </button>
+            <button onClick={saveCode} className="share-btn" title="Share">Share</button>
+            <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
+              ?
+            </button>
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="theme-toggle-btn"
+              title="Toggle theme"
+              style={{ marginLeft: 10, fontSize: 20 }}
+            >
+              {theme === "dark" ? "🌙" : "🔆"}
+            </button>
+          </div>
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <CodeEditor
+              code={code}
+              setCode={setCode}
+              language={language}
+              theme={theme}
+            />
+          </div>
+          {showHelp && <Help onClose={() => setShowHelp(false)} />}
         </div>
-        <div style={{ flex: 1, minHeight: 0 }}>
-          <CodeEditor
-            code={code}
-            setCode={setCode}
-            language={language}
-            theme={theme}
+        <div className={`split-right ${theme}`}>
+          <label className="input-label">Input:</label>
+          <textarea
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            rows={3}
+            placeholder="Type input here..."
+            className="input-box"
           />
+          <div className="output-label">Output:</div>
+          <Terminal output={output} outputRef={outputRef} />
         </div>
-        {showHelp && <Help onClose={() => setShowHelp(false)} />}
-      </div>
-      <div className={`split-right ${theme}`}>
-        <label className="input-label">Input:</label>
-        <textarea
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          rows={3}
-          placeholder="Type input here..."
-          className="input-box"
-        />
-        <div className="output-label">Output:</div>
-        <Terminal output={output} outputRef={outputRef} />
       </div>
     </div>
   );
