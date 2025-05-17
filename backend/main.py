@@ -8,14 +8,17 @@ from docker_runner import run_code_in_docker
 
 app = FastAPI()
 
-# Allow all origins for development; restrict in production if needed!
+# --- CORS Middleware ---
+# For development, allow all origins. For production, set your frontend domain here.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://prompt-pad-sarnitha-a-ds-projects.vercel.app"],  # Change to ["https://your-frontend.vercel.app"] for production
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# --- Request Models ---
 class CodeRequest(BaseModel):
     code: str
     input: Optional[str] = ""
@@ -26,6 +29,7 @@ class SaveRequest(BaseModel):
     title: Optional[str] = ""
     language: str
 
+# --- API Endpoints ---
 @app.get("/")
 async def root():
     return {"message": "Prompt Pad API is running."}
@@ -38,12 +42,16 @@ async def run_code(req: CodeRequest):
             media_type="text/plain"
         )
     except Exception as e:
+        # Optionally log the error here
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/save")
 async def save(req: SaveRequest):
-    code_id = save_code(req.code, req.title, req.language)
-    return {"id": code_id}
+    try:
+        code_id = save_code(req.code, req.title, req.language)
+        return {"id": code_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to save code: " + str(e))
 
 @app.get("/load/{code_id}")
 async def load(code_id: str):
