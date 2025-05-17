@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import os
 from bson.objectid import ObjectId
 
+# Get MongoDB URI from environment variables
 MONGO_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "mongodb://localhost:27017/"
 client = MongoClient(MONGO_URI)
 db = client["prompt_pad"]
@@ -23,8 +24,32 @@ def get_code(code_id):
         return None
     if doc:
         return {
+            "id": str(doc["_id"]),
             "code": doc.get("code", ""),
             "title": doc.get("title", ""),
             "language": doc.get("language", "python")
         }
     return None
+
+def update_code(code_id, code=None, title=None, language=None):
+    update_fields = {}
+    if code is not None:
+        update_fields["code"] = code
+    if title is not None:
+        update_fields["title"] = title
+    if language is not None:
+        update_fields["language"] = language
+    if not update_fields:
+        return False
+    try:
+        result = codes.update_one({"_id": ObjectId(code_id)}, {"$set": update_fields})
+        return result.modified_count > 0
+    except Exception:
+        return False
+
+def delete_code(code_id):
+    try:
+        result = codes.delete_one({"_id": ObjectId(code_id)})
+        return result.deleted_count > 0
+    except Exception:
+        return False
