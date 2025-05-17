@@ -15,6 +15,11 @@ LANGUAGE_MAP = {
 
 def run_code_in_judge0(code, stdin, language):
     lang_id = LANGUAGE_MAP.get(language.lower())
+    resp = requests.post(...)
+    print("Judge0 submit response:", resp.status_code, resp.text)
+    if resp.status_code != 201:
+        yield b"Failed to submit code."
+        return
     if not lang_id:
         yield b"Unsupported language."
         return
