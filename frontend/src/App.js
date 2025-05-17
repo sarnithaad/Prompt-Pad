@@ -133,11 +133,14 @@ function App() {
     <div className={theme}>
       {/* Page-wide centered heading */}
       <div style={{
-        textAlign: "center",
-        margin: "24px 0 10px 0",
-        borderBottom: "1px solid #eee",
-        paddingBottom: "4px"
-      }}>
+    textAlign: "center",
+    margin: "24px 0 10px 0",
+    borderBottom: "1px solid #eee",
+    paddingBottom: "4px",
+    background: theme === "light" ? "#fff" : "transparent", // White in light mode
+    boxShadow: theme === "light" ? "0 2px 8px rgba(0,0,0,0.03)" : "none"
+  }}
+>
         <h1
           style={{
             margin: 0,
