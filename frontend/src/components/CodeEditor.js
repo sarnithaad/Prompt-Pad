@@ -10,21 +10,23 @@ const MONACO_LANG_MAP = {
   javascript: "javascript",
 };
 
-function CodeEditor({ code, setCode, theme, language }) {
+function CodeEditor({ code, setCode, theme = "dark", language = "python" }) {
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <Editor
         height="100%"
         width="100%"
-        language={MONACO_LANG_MAP[language]}
-        theme={theme === "dark" ? "vs-dark" : "vs-light"}
-        value={code}
+        language={MONACO_LANG_MAP[language] || "python"}
+        theme={theme === "light" ? "vs-light" : "vs-dark"}
+        value={code || ""}
         options={{
           fontSize: 16,
           minimap: { enabled: false },
           automaticLayout: true,
+          scrollBeyondLastLine: false,
+          wordWrap: "on",
         }}
-        onChange={(value) => setCode(value ?? "")}
+        onChange={value => setCode(value ?? "")}
       />
     </div>
   );
