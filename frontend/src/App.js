@@ -147,7 +147,7 @@ function App() {
             letterSpacing: "1px"
           }}
         >
-          Prompt P
+          Prompt Pad - Code it. Run it. Learn it. — Your Personal Online IDE
         </h1>
         <div
           style={{
