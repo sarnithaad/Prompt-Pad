@@ -101,6 +101,21 @@ body {
   background: #24913a;
 }
 
+.theme-toggle-btn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  font-size: 18px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.theme-toggle-btn:hover {
+  background: #0070f3;
+}
+
 /* Input and Output labels */
 .input-label, .output-label {
   font-weight: bold;
@@ -219,3 +234,54 @@ body {
   border-radius: 6px;
 }
 
+/* --- LIGHT THEME OVERRIDES --- */
+.split-app.light {
+  background: #f5f5f5;
+  color: #222;
+}
+.split-left.light, .split-right.light {
+  background: #fff;
+  color: #222;
+}
+.editor-header.light label,
+.split-app.light .editor-header label {
+  color: #222;
+}
+.input-label, .output-label,
+.split-app.light .input-label, .split-app.light .output-label {
+  color: #222;
+}
+.input-box,
+.split-app.light .input-box,
+.split-right.light .input-box {
+  background: #f9f9f9;
+  color: #222;
+  border: 1px solid #bbb;
+}
+.output-area,
+.split-app.light .output-area,
+.split-right.light .output-area {
+  background: #f5f5f5;
+  color: #222;
+  border: 1px solid #bbb;
+}
+.help-editor-modal,
+.split-app.light .help-editor-modal {
+  background: #fff;
+  color: #222;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+}
+.help-close-btn,
+.split-app.light .help-close-btn {
+  color: #222;
+}
+.theme-toggle-btn,
+.split-app.light .theme-toggle-btn {
+  background: #bbb;
+  color: #222;
+}
+.theme-toggle-btn:hover,
+.split-app.light .theme-toggle-btn:hover {
+  background: #0070f3;
+  color: #fff;
+}
