@@ -3,22 +3,19 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
-from database import save_code, get_code
-from docker_runner import run_code_in_docker
+from app.database import save_code, get_code
+from app.judge0_runner import run_code_in_judge0
 
 app = FastAPI()
 
-# --- CORS Middleware ---
-# For development, allow all origins. For production, set your frontend domain here.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://prompt-pad-sarnitha-a-ds-projects.vercel.app"],  # Change to ["https://your-frontend.vercel.app"] for production
+    allow_origins=["https://prompt-pad-sarnitha-a-ds-projects.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- Request Models ---
 class CodeRequest(BaseModel):
     code: str
     input: Optional[str] = ""
@@ -29,7 +26,6 @@ class SaveRequest(BaseModel):
     title: Optional[str] = ""
     language: str
 
-# --- API Endpoints ---
 @app.get("/")
 async def root():
     return {"message": "Prompt Pad API is running."}
@@ -38,11 +34,10 @@ async def root():
 async def run_code(req: CodeRequest):
     try:
         return StreamingResponse(
-            run_code_in_docker(req.code, req.input, req.language),
+            run_code_in_judge0(req.code, req.input, req.language),
             media_type="text/plain"
         )
     except Exception as e:
-        # Optionally log the error here
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/save")
