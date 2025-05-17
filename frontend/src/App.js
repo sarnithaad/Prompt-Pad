@@ -29,7 +29,16 @@ function App() {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    // Persist theme in localStorage
+    return localStorage.getItem("theme") || "dark";
+  });
   const outputRef = useRef();
+
+  // Persist theme to localStorage
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // Load shared code from /load/:id if present in URL
   useEffect(() => {
@@ -122,8 +131,8 @@ function App() {
   };
 
   return (
-    <div className="split-app">
-      <div className="split-left" style={{ position: "relative" }}>
+    <div className={`split-app ${theme}`}>
+      <div className={`split-left ${theme}`} style={{ position: "relative" }}>
         <div className="editor-header">
           <label>
             Language:&nbsp;
@@ -140,18 +149,26 @@ function App() {
           <button onClick={() => setShowHelp(true)} className="help-btn" title="Help">
             ?
           </button>
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="theme-toggle-btn"
+            title="Toggle theme"
+            style={{ marginLeft: 10, fontSize: 20 }}
+          >
+            {theme === "dark" ? "🌙" : "🔆"}
+          </button>
         </div>
         <div style={{ flex: 1, minHeight: 0 }}>
           <CodeEditor
             code={code}
             setCode={setCode}
             language={language}
-            theme="dark"
+            theme={theme}
           />
         </div>
         {showHelp && <Help onClose={() => setShowHelp(false)} />}
       </div>
-      <div className="split-right">
+      <div className={`split-right ${theme}`}>
         <label className="input-label">Input:</label>
         <textarea
           value={input}
@@ -168,5 +185,3 @@ function App() {
 }
 
 export default App;
-
-
