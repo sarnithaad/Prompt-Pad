@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import CodeEditor from "./components/CodeEditor";
 import Terminal from "./components/Terminal";
 import Help from "./components/Help";
@@ -30,6 +30,29 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const outputRef = useRef();
+
+  // Load shared code from /load/:id if present in URL
+  useEffect(() => {
+    const match = window.location.pathname.match(/^\/load\/(.+)/);
+    if (match) {
+      const id = match[1];
+      fetch(
+        process.env.REACT_APP_API_URL
+          ? `${process.env.REACT_APP_API_URL}/load/${id}`
+          : `http://localhost:8000/load/${id}`
+      )
+        .then(res => res.json())
+        .then(data => {
+          if (data.code && data.language) {
+            setCode(data.code);
+            setLanguage(data.language);
+          }
+        })
+        .catch(() => {
+          alert("Failed to load shared code.");
+        });
+    }
+  }, []);
 
   const runCode = async () => {
     setOutput("Running...");
@@ -74,7 +97,7 @@ function App() {
   };
 
   const saveCode = async () => {
-    const title = prompt("Enter a title for your code:");
+    const title = prompt("Enter a title for your code (optional):");
     if (title === null) return; // User cancelled
     try {
       const response = await fetch(
@@ -87,6 +110,7 @@ function App() {
           body: JSON.stringify({ code, title, language }),
         }
       );
+      if (!response.ok) throw new Error("Failed to save code");
       const data = await response.json();
       window.prompt(
         "Share this link:",
